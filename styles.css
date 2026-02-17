@@ -1,0 +1,42 @@
+* {
+    box-sizing: border-box;
+    font-size: 5vh;
+}
+
+.calculator {
+    display: flex;
+    flex-direction: column;
+    height: 75vh;
+    width: 75vw;
+    background-color: grey;
+    border: 2px solid black;
+    border-radius: 1%;
+    padding: 16px;
+    gap: 20px;
+}
+
+.display {
+    text-align: right;
+    border: 2px solid black;
+    border-radius: 1%;
+    background-color: white;
+    padding: 20px;
+}
+
+.numpad {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;  
+}
+
+.numpad-line {
+    flex: 1;
+    display: flex;
+    gap: 4px;
+}
+
+button {
+    flex: 1;
+    border-radius: 16px;
+}

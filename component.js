@@ -14,8 +14,6 @@ function divide(x, y) {
     return x / y;
 }
 
-let numberFirst, numberSecond, operator;
-
 function operate(operateSign, num1, num2) {
     switch (operateSign) {
         case `+`:
@@ -29,7 +27,33 @@ function operate(operateSign, num1, num2) {
     }
 }
 
+const numText = `0123456789`;
+const operateSign = `+-*/`;
+let numberFirst = `0`,
+numberSecond = `0`,
+operator = ``;
+
+const displayText = document.querySelector(`.display-text`)
 const buttons = document.querySelectorAll(`button`)
-buttons.forEach((button) => {
-    button.addEventListener(`click`, (e) => console.log(e.target.textContent));
+buttons.forEach((button) => {    
+    button.addEventListener(`click`, (e) => {
+        let buttonContent = e.target.textContent;
+        if (e.target.className === `clear`) {
+            numberFirst = `0`;
+            numberSecond = `0`;
+            operator = ``;
+            displayText.textContent = numberSecond;
+        } else if (operateSign.includes(buttonContent)){
+            operator = buttonContent;
+            numberFirst = numberSecond;
+            numberSecond = `0`;
+        } else if (numText.includes(buttonContent)) {
+            numberSecond += buttonContent;
+            displayText.textContent = numberSecond;
+        } else if (e.target.className === `equal`) {
+            if (!operator) displayText.textContent = numberSecond;
+            numberSecond = operate(operator, +numberFirst, +numberSecond);
+            displayText.textContent = numberSecond;
+        }
+    });
 })

@@ -1,17 +1,17 @@
 function add(x, y) {
-    return x + y;
+    return Math.round((x + y) * 1000) / 1000;
 }
 
 function subtract(x, y) {
-    return x - y;
+    return Math.round((x - y) * 1000) / 1000;
 }
 
 function multiply(x, y) {
-    return x * y;
+    return Math.round((x * y) * 1000) / 1000;
 }
 
 function divide(x, y) {
-    return x / y;
+    return (y === 0) ? `Error:DivByUserInt` : Math.round((x / y) * 1000) / 1000;
 }
 
 function operate(operateSign, num1, num2) {
@@ -29,9 +29,21 @@ function operate(operateSign, num1, num2) {
 
 const numText = `0123456789`;
 const operateSign = `+-*/`;
-let numberFirst = `0`,
-numberSecond = `0`,
-operator = ``;
+let operandFirst = ``,
+operandSecond = ``,
+operator = ``,
+isReset = false,
+isSecondOperand= false,
+isMathReady = false;
+
+function reset() {
+    operandFirst = ``;
+    operandSecond = ``;
+    operator = ``;
+    isReset = false;
+    isSecondOperand= false;
+    isMathReady = false;
+}
 
 const displayText = document.querySelector(`.display-text`)
 const buttons = document.querySelectorAll(`button`)
@@ -39,21 +51,39 @@ buttons.forEach((button) => {
     button.addEventListener(`click`, (e) => {
         let buttonContent = e.target.textContent;
         if (e.target.className === `clear`) {
-            numberFirst = `0`;
-            numberSecond = `0`;
-            operator = ``;
-            displayText.textContent = numberSecond;
-        } else if (operateSign.includes(buttonContent)){
-            operator = buttonContent;
-            numberFirst = numberSecond;
-            numberSecond = `0`;
+            reset();
+            displayText.textContent = +operandFirst;
         } else if (numText.includes(buttonContent)) {
-            numberSecond += buttonContent;
-            displayText.textContent = numberSecond;
+            if (isSecondOperand) {
+                operandSecond += buttonContent;
+                isMathReady = true;
+                displayText.textContent = +operandSecond;
+            } else {
+                if (isReset) {
+                    operandFirst = ``;
+                    isReset = false;
+                }
+                operandFirst += buttonContent;
+                displayText.textContent = +operandFirst;
+            }
+        } else if (operateSign.includes(buttonContent)){
+            if (isMathReady) {
+                operandFirst = operate(operator, +operandFirst, +operandSecond);
+                displayText.textContent = operandFirst;
+                isMathReady = false;
+            }
+            operator = buttonContent;
+            isSecondOperand = true;
+            operandSecond = ``;
         } else if (e.target.className === `equal`) {
-            if (!operator) displayText.textContent = numberSecond;
-            numberSecond = operate(operator, +numberFirst, +numberSecond);
-            displayText.textContent = numberSecond;
+            if (isMathReady) {
+                operandFirst = operate(operator, +operandFirst, +operandSecond);
+                operandSecond = ``;
+                isSecondOperand = false;
+                isReset = true;
+                isMathReady = false;
+                displayText.textContent = operandFirst;
+            }
         }
     });
 })

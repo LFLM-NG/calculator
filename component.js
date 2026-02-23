@@ -49,7 +49,7 @@ function reset() {
 
 function display(text, result) {
     if (!result) text.textContent = `0`;
-    else if (result === `.`) text.textContent = `0.`;
+    else if (result.toString().at(0) === `.`) text.textContent = `0${result}`;
     else text.textContent = result ;
     return text.textContent;
 }

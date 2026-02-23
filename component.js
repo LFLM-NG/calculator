@@ -64,6 +64,7 @@ buttons.forEach((button) => {
         let buttonContent = e.target.textContent;
         if (e.target.className === `clear`) {
             reset();
+            buttonDecimal.disabled = false;
             display(displayText, operandFirst);
         } else if (numText.includes(buttonContent)) {
             if (isSecondOperand) {
@@ -96,6 +97,7 @@ buttons.forEach((button) => {
                 isDecimalActive = true;
                 buttonDecimal.disabled = true;
             }
+            isBackspaceActive = true;
         } else if (e.target.className === `backspace`) {
             if (isBackspaceActive) {
                 if (isSecondOperand) {
@@ -175,6 +177,7 @@ document.addEventListener(`keyup`, (e) => {
             isDecimalActive = true;
             buttonDecimal.disabled = true;
         }
+        isBackspaceActive = true;
     } else if (keyContent === `Backspace`) {
         if (isBackspaceActive) {
             if (isSecondOperand) {

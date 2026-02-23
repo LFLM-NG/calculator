@@ -140,4 +140,82 @@ buttons.forEach((button) => {
             }
         }
     });
-})
+});
+
+document.addEventListener(`keyup`, (e) => {
+    keyContent = e.key;
+    if (numText.includes(keyContent)) {
+        if (isSecondOperand) {
+            operandSecond += keyContent;
+            isMathReady = true;
+            isBackspaceActive = true;
+            display(displayText, operandSecond);
+        } else {
+            if (isReset) {
+                operandFirst = ``;
+                isReset = false;
+            }
+            operandFirst += keyContent;
+            isBackspaceActive = true;
+            display(displayText, operandFirst);
+        }
+    } else if (keyContent === `.`){
+        if (!isDecimalActive) {
+            if (isSecondOperand) {
+                operandSecond += keyContent;
+                display(displayText, operandSecond);
+            } else {
+                if (isReset) {
+                    operandFirst = ``;
+                    isReset = false;
+                }
+                operandFirst += keyContent;
+                display(displayText, operandFirst);
+            }
+            isDecimalActive = true;
+            buttonDecimal.disabled = true;
+        }
+    } else if (keyContent === `Backspace`) {
+        if (isBackspaceActive) {
+            if (isSecondOperand) {
+                operandSecond = operandSecond.slice(0, -1);
+                if (!operandSecond.includes(`.`)) {
+                    isDecimalActive = false;
+                    buttonDecimal.disabled = false;
+                }
+                display(displayText, operandSecond);
+            } else {
+                operandFirst = operandFirst.slice(0, -1);
+                if (!operandFirst.includes(`.`)) {
+                    isDecimalActive = false;
+                    buttonDecimal.disabled = false;
+                }
+                display(displayText, operandFirst);
+            }
+        }
+    } else if (operateSign.includes(keyContent)){
+        if (isMathReady) {
+            operandFirst = operate(operator, +operandFirst, +operandSecond);
+            display(displayText, operandFirst);
+            isMathReady = false;
+        }
+        operator = keyContent;
+        isSecondOperand = true;
+        operandSecond = ``;
+        isDecimalActive = false;
+        buttonDecimal.disabled = false;
+        isBackspaceActive = false;
+    } else if (keyContent === `=` || keyContent === `Enter`) {
+        if (isMathReady) {
+            operandFirst = operate(operator, +operandFirst, +operandSecond);
+            operandSecond = ``;
+            isSecondOperand = false;
+            isReset = true;
+            isMathReady = false;
+            isDecimalActive = false;
+            buttonDecimal.disabled = false;
+            isBackspaceActive = false;
+            display(displayText, operandFirst);
+        }
+    }
+});

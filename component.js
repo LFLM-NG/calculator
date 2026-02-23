@@ -34,7 +34,8 @@ operandSecond = ``,
 operator = ``,
 isReset = false,
 isSecondOperand= false,
-isMathReady = false;
+isMathReady = false,
+isDecimalActive = false;
 
 function reset() {
     operandFirst = ``;
@@ -43,38 +44,65 @@ function reset() {
     isReset = false;
     isSecondOperand= false;
     isMathReady = false;
+    isDecimalActive = false;
+}
+
+function display(text, result) {
+    if (!result) text.textContent = `0`;
+    else if (result === `.`) text.textContent = `0.`;
+    else text.textContent = result ;
+    return text.textContent;
 }
 
 const displayText = document.querySelector(`.display-text`)
+const buttonDecimal = document.querySelector(`.decimal`)
 const buttons = document.querySelectorAll(`button`)
 buttons.forEach((button) => {    
     button.addEventListener(`click`, (e) => {
         let buttonContent = e.target.textContent;
         if (e.target.className === `clear`) {
             reset();
-            displayText.textContent = +operandFirst;
+            display(displayText, operandFirst);
         } else if (numText.includes(buttonContent)) {
             if (isSecondOperand) {
                 operandSecond += buttonContent;
                 isMathReady = true;
-                displayText.textContent = +operandSecond;
+                display(displayText, operandSecond);
             } else {
                 if (isReset) {
                     operandFirst = ``;
                     isReset = false;
                 }
                 operandFirst += buttonContent;
-                displayText.textContent = +operandFirst;
+                display(displayText, operandFirst);
+            }
+        } else if (button === buttonDecimal){
+            if (!isDecimalActive) {
+                if (isSecondOperand) {
+                    operandSecond += buttonContent;
+                    display(displayText, operandSecond);
+                } else {
+                    if (isReset) {
+                        operandFirst = ``;
+                        isReset = false;
+                    }
+                    operandFirst += buttonContent;
+                    display(displayText, operandFirst);
+                }
+                isDecimalActive = true;
+                button.disabled = true;
             }
         } else if (operateSign.includes(buttonContent)){
             if (isMathReady) {
                 operandFirst = operate(operator, +operandFirst, +operandSecond);
-                displayText.textContent = operandFirst;
+                display(displayText, operandFirst);
                 isMathReady = false;
             }
             operator = buttonContent;
             isSecondOperand = true;
             operandSecond = ``;
+            isDecimalActive = false;
+            buttonDecimal.disabled = false;
         } else if (e.target.className === `equal`) {
             if (isMathReady) {
                 operandFirst = operate(operator, +operandFirst, +operandSecond);
@@ -82,7 +110,9 @@ buttons.forEach((button) => {
                 isSecondOperand = false;
                 isReset = true;
                 isMathReady = false;
-                displayText.textContent = operandFirst;
+                isDecimalActive = false;
+                buttonDecimal.disabled = false;
+                display(displayText, operandFirst);
             }
         }
     });

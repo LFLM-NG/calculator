@@ -35,7 +35,8 @@ operator = ``,
 isReset = false,
 isSecondOperand= false,
 isMathReady = false,
-isDecimalActive = false;
+isDecimalActive = false,
+isBackspaceActive = false;
 
 function reset() {
     operandFirst = ``;
@@ -45,6 +46,7 @@ function reset() {
     isSecondOperand= false;
     isMathReady = false;
     isDecimalActive = false;
+    isBackspaceActive = false;
 }
 
 function display(text, result) {
@@ -67,6 +69,7 @@ buttons.forEach((button) => {
             if (isSecondOperand) {
                 operandSecond += buttonContent;
                 isMathReady = true;
+                isBackspaceActive = true;
                 display(displayText, operandSecond);
             } else {
                 if (isReset) {
@@ -74,6 +77,7 @@ buttons.forEach((button) => {
                     isReset = false;
                 }
                 operandFirst += buttonContent;
+                isBackspaceActive = true;
                 display(displayText, operandFirst);
             }
         } else if (button === buttonDecimal){
@@ -90,7 +94,25 @@ buttons.forEach((button) => {
                     display(displayText, operandFirst);
                 }
                 isDecimalActive = true;
-                button.disabled = true;
+                buttonDecimal.disabled = true;
+            }
+        } else if (e.target.className === `backspace`) {
+            if (isBackspaceActive) {
+                if (isSecondOperand) {
+                    operandSecond = operandSecond.slice(0, -1);
+                    if (!operandSecond.includes(`.`)) {
+                        isDecimalActive = false;
+                        buttonDecimal.disabled = false;
+                    }
+                    display(displayText, operandSecond);
+                } else {
+                    operandFirst = operandFirst.slice(0, -1);
+                    if (!operandFirst.includes(`.`)) {
+                        isDecimalActive = false;
+                        buttonDecimal.disabled = false;
+                    }
+                    display(displayText, operandFirst);
+                }
             }
         } else if (operateSign.includes(buttonContent)){
             if (isMathReady) {
@@ -103,6 +125,7 @@ buttons.forEach((button) => {
             operandSecond = ``;
             isDecimalActive = false;
             buttonDecimal.disabled = false;
+            isBackspaceActive = false;
         } else if (e.target.className === `equal`) {
             if (isMathReady) {
                 operandFirst = operate(operator, +operandFirst, +operandSecond);
@@ -112,6 +135,7 @@ buttons.forEach((button) => {
                 isMathReady = false;
                 isDecimalActive = false;
                 buttonDecimal.disabled = false;
+                isBackspaceActive = false;
                 display(displayText, operandFirst);
             }
         }

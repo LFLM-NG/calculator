@@ -3,31 +3,47 @@
     font-size: 48px;
 }
 
+body {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(127, 255, 212, 0.5);
+}
+
 .calculator {
     display: flex;
     flex-direction: column;
-    height: 900px;
-    width: 700px;
+    max-width: 720px;
     background-color: black;
-    border-radius: 1%;
+    border-radius: 12px;
     padding: 16px;
     gap: 20px;
 }
 
 .display {
     border: 2px solid black;
-    border-radius: 1%;
+    border-radius: 12px;
     background-color: white;
-    padding: 16px;
+    padding: 0 12px;
     flex: 1;
     display: flex;
+    flex-direction: column;
     background-color: lightgray;
+    justify-content: center;
+    align-items: flex-end;
 }
 
-.display-text {
-    margin-left: auto;
+.current-number, .previous-number {
+    display: flex;
 }
 
+.previous-number {
+    font-size: 24px;
+    color: rgba(0, 0, 0, 0.75);
+}
+    
 .numpad {
     flex: 5;
     display: flex;
@@ -42,18 +58,55 @@
 }
 
 button {
+    font-size: 36px;
+    display: flex;
     flex: 1;
     border-radius: 16px;
+    justify-content: center;
+    align-items: center;
+    height: 72px;
+    width: 72px;
+    background-color: transparent;
+    color: white;
+    text-shadow: -1px -1px black;
+    text-shadow: -1px 1px black;
+    text-shadow: 1px -1px black;
+    text-shadow: 1px 1px black;
+    font-weight: 700;
+    border-color: rgba(0, 255, 255, 0.5);
 }
 
-.plus, .minus, .multiply, .divide, .equal {
-    background-color: orange;
+button:hover {
+    background-color: aqua;
 }
 
+.operator {
+    border-color: rgb(255, 255, 0, 0.75);
+}
+
+.operator:hover {
+    background-color: rgb(255, 255, 0, 0.75);
+}
+
+.decimal, .equal {
+    border-color: rgb(127, 255, 212);
+}
+
+.decimal:hover, .equal:hover {
+    background-color: rgb(127, 255, 212);
+}
 .clear {
-    background-color: red;
+    border-color: rgb(255, 75, 150);
+}
+
+.clear:hover {
+    background-color: rgb(255, 75, 150);
 }
 
 .backspace {
-    background-color: lightgray;
+    border-color: rgb(255, 255, 255);
+}
+
+.backspace:hover {
+    background-color: rgb(75, 75, 75);
 }

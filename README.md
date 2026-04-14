@@ -5,10 +5,6 @@ Keyboard inputs are supported for numbers and operators using their respective k
 Backspace key to delete and Enter key as "=" are also supported  
 
 Currently under redesign, above features not available  
-Numbers, Operators, Equal, Clear are usable  
-Decimal not yet available  
-Backspace not yet available  
-Keyboard support not yet available  
 
 Credits to Coding With Rob for the redesign template  
 [Reference Video Guide](https://youtu.be/2L30sFBxUyw)

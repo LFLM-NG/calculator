@@ -11,6 +11,8 @@ const decimal = document.querySelector(`.decimal`);
 
 const clear = document.querySelector(`.clear`);
 
+const backspace = document.querySelector(`.backspace`);
+
 const numberButtons = document.querySelectorAll(`.number`);
 
 const operators = document.querySelectorAll(`.operator`);
@@ -34,6 +36,14 @@ equal.addEventListener(`click`, () => {
 });
 
 clear.addEventListener(`click`, clearCalculator);
+
+decimal.addEventListener(`click`, () => {
+  addDecimal();
+});
+
+backspace.addEventListener(`click`, () => {
+  handleDelete();
+});
 
 function handleNumber(num) {
   if (previousNum !== `` && currentNum !== `` && operator === ``) {
@@ -112,4 +122,25 @@ function clearCalculator() {
   operator = ``;
   previousDisplayNumber.textContent = ``;
   currentDisplayNumber.textContent = `0`;
+}
+
+function addDecimal() {
+  if (!currentNum.includes(`.`)) {
+    currentNum += `.`;
+    currentDisplayNumber.textContent = currentNum;
+  }
+}
+
+function handleDelete() {
+  if (currentNum !== ``) {
+    currentNum = currentNum.slice(0, -1);
+    currentDisplayNumber.textContent = currentNum;
+  }
+  if (currentNum === ``) {
+    currentDisplayNumber.textContent = `0`;
+  }
+  if (currentNum === `` && previousNum !== `` && operator === ``) {
+    previousNum = previousNum.slice(0, -1);
+    currentDisplayNumber.textContent = previousNum;
+  }
 }

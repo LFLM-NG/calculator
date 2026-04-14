@@ -1,10 +1,14 @@
 # Browser Calculator
 Final Practice for The Odin Project's Foundation Curriculum  
   
-Operations can only be performed once at least a number is entered  
 Keyboard inputs are supported for numbers and operators using their respective keys  
 Backspace key to delete and Enter key as "=" are also supported  
-Note that there's no indicator for the currently active operator
 
-Currently under redesign  
-Functions will not work properly
+Currently under redesign, above features not available  
+Numbers, Operators, Equal, Clear are usable  
+Decimal not yet available  
+Backspace not yet available  
+Keyboard support not yet available  
+
+Credits to Coding With Rob for the redesign template  
+[Reference Video Guide](https://youtu.be/2L30sFBxUyw)

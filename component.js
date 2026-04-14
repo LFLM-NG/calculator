@@ -1,224 +1,115 @@
-function add(x, y) {
-    return Math.round((x + y) * 1000) / 1000;
-}
+let currentNum = ``;
+let previousNum = ``;
+let operator = ``;
 
-function subtract(x, y) {
-    return Math.round((x - y) * 1000) / 1000;
-}
+const currentDisplayNumber = document.querySelector(`.current-number`);
+const previousDisplayNumber = document.querySelector(`.previous-number`);
 
-function multiply(x, y) {
-    return Math.round((x * y) * 1000) / 1000;
-}
+const equal = document.querySelector(`.equal`);
 
-function divide(x, y) {
-    return (y === 0) ? `Error:DivByUserInt` : Math.round((x / y) * 1000) / 1000;
-}
+const decimal = document.querySelector(`.decimal`);
 
-function operate(operateSign, num1, num2) {
-    switch (operateSign) {
-        case `+`:
-            return add(num1, num2);
-        case `-`:
-            return subtract(num1, num2);
-        case `*`:
-            return multiply(num1, num2);
-        case `/`:
-            return divide(num1, num2);
-    }
-}
+const clear = document.querySelector(`.clear`);
 
-const numText = `0123456789`;
-const operateSign = `+-*/`;
-let operandFirst = ``,
-operandSecond = ``,
-operator = ``,
-isReset = false,
-isSecondOperand= false,
-isMathReady = false,
-isDecimalActive = false,
-isBackspaceActive = false;
+const numberButtons = document.querySelectorAll(`.number`);
 
-function reset() {
-    operandFirst = ``;
-    operandSecond = ``;
-    operator = ``;
-    isReset = false;
-    isSecondOperand= false;
-    isMathReady = false;
-    isDecimalActive = false;
-    isBackspaceActive = false;
-}
+const operators = document.querySelectorAll(`.operator`);
 
-function display(text, result) {
-    if (!result) text.textContent = `0`;
-    else if (result.toString().at(0) === `.`) text.textContent = `0${result}`;
-    else text.textContent = result ;
-    return text.textContent;
-}
-
-const displayText = document.querySelector(`.display-text`)
-const buttonDecimal = document.querySelector(`.decimal`)
-const buttons = document.querySelectorAll(`button`)
-buttons.forEach((button) => {    
-    button.addEventListener(`click`, (e) => {
-        let buttonContent = e.target.textContent;
-        if (e.target.className === `clear`) {
-            reset();
-            buttonDecimal.disabled = false;
-            display(displayText, operandFirst);
-        } else if (numText.includes(buttonContent)) {
-            if (isSecondOperand) {
-                operandSecond += buttonContent;
-                isMathReady = true;
-                isBackspaceActive = true;
-                display(displayText, operandSecond);
-            } else {
-                if (isReset) {
-                    operandFirst = ``;
-                    isReset = false;
-                }
-                operandFirst += buttonContent;
-                isBackspaceActive = true;
-                display(displayText, operandFirst);
-            }
-        } else if (button === buttonDecimal){
-            if (!isDecimalActive) {
-                if (isSecondOperand) {
-                    operandSecond += buttonContent;
-                    display(displayText, operandSecond);
-                } else {
-                    if (isReset) {
-                        operandFirst = ``;
-                        isReset = false;
-                    }
-                    operandFirst += buttonContent;
-                    display(displayText, operandFirst);
-                }
-                isDecimalActive = true;
-                buttonDecimal.disabled = true;
-            }
-            isBackspaceActive = true;
-        } else if (e.target.className === `backspace`) {
-            if (isBackspaceActive) {
-                if (isSecondOperand) {
-                    operandSecond = operandSecond.slice(0, -1);
-                    if (!operandSecond.includes(`.`)) {
-                        isDecimalActive = false;
-                        buttonDecimal.disabled = false;
-                    }
-                    display(displayText, operandSecond);
-                } else {
-                    operandFirst = operandFirst.slice(0, -1);
-                    if (!operandFirst.includes(`.`)) {
-                        isDecimalActive = false;
-                        buttonDecimal.disabled = false;
-                    }
-                    display(displayText, operandFirst);
-                }
-            }
-        } else if (operateSign.includes(buttonContent)){
-            if (isMathReady) {
-                operandFirst = operate(operator, +operandFirst, +operandSecond);
-                display(displayText, operandFirst);
-                isMathReady = false;
-            }
-            operator = buttonContent;
-            isSecondOperand = true;
-            operandSecond = ``;
-            isDecimalActive = false;
-            buttonDecimal.disabled = false;
-            isBackspaceActive = false;
-        } else if (e.target.className === `equal`) {
-            if (isMathReady) {
-                operandFirst = operate(operator, +operandFirst, +operandSecond);
-                operandSecond = ``;
-                isSecondOperand = false;
-                isReset = true;
-                isMathReady = false;
-                isDecimalActive = false;
-                buttonDecimal.disabled = false;
-                isBackspaceActive = false;
-                display(displayText, operandFirst);
-            }
-        }
-    });
+numberButtons.forEach((btn) => {
+  btn.addEventListener(`click`, (e) => {
+    handleNumber(e.target.textContent);
+  });
 });
 
-document.addEventListener(`keyup`, (e) => {
-    keyContent = e.key;
-    if (numText.includes(keyContent)) {
-        if (isSecondOperand) {
-            operandSecond += keyContent;
-            isMathReady = true;
-            isBackspaceActive = true;
-            display(displayText, operandSecond);
-        } else {
-            if (isReset) {
-                operandFirst = ``;
-                isReset = false;
-            }
-            operandFirst += keyContent;
-            isBackspaceActive = true;
-            display(displayText, operandFirst);
-        }
-    } else if (keyContent === `.`){
-        if (!isDecimalActive) {
-            if (isSecondOperand) {
-                operandSecond += keyContent;
-                display(displayText, operandSecond);
-            } else {
-                if (isReset) {
-                    operandFirst = ``;
-                    isReset = false;
-                }
-                operandFirst += keyContent;
-                display(displayText, operandFirst);
-            }
-            isDecimalActive = true;
-            buttonDecimal.disabled = true;
-        }
-        isBackspaceActive = true;
-    } else if (keyContent === `Backspace`) {
-        if (isBackspaceActive) {
-            if (isSecondOperand) {
-                operandSecond = operandSecond.slice(0, -1);
-                if (!operandSecond.includes(`.`)) {
-                    isDecimalActive = false;
-                    buttonDecimal.disabled = false;
-                }
-                display(displayText, operandSecond);
-            } else {
-                operandFirst = operandFirst.slice(0, -1);
-                if (!operandFirst.includes(`.`)) {
-                    isDecimalActive = false;
-                    buttonDecimal.disabled = false;
-                }
-                display(displayText, operandFirst);
-            }
-        }
-    } else if (operateSign.includes(keyContent)){
-        if (isMathReady) {
-            operandFirst = operate(operator, +operandFirst, +operandSecond);
-            display(displayText, operandFirst);
-            isMathReady = false;
-        }
-        operator = keyContent;
-        isSecondOperand = true;
-        operandSecond = ``;
-        isDecimalActive = false;
-        buttonDecimal.disabled = false;
-        isBackspaceActive = false;
-    } else if (keyContent === `=` || keyContent === `Enter`) {
-        if (isMathReady) {
-            operandFirst = operate(operator, +operandFirst, +operandSecond);
-            operandSecond = ``;
-            isSecondOperand = false;
-            isReset = true;
-            isMathReady = false;
-            isDecimalActive = false;
-            buttonDecimal.disabled = false;
-            isBackspaceActive = false;
-            display(displayText, operandFirst);
-        }
-    }
+operators.forEach((btn) => {
+  btn.addEventListener(`click`, (e) => {
+    handleOperator(e.target.textContent);
+  });
 });
+
+equal.addEventListener(`click`, () => {
+  if (currentNum !== `` && previousNum !== ``) {
+    calculate();
+  }
+});
+
+clear.addEventListener(`click`, clearCalculator);
+
+function handleNumber(num) {
+  if (previousNum !== `` && currentNum !== `` && operator === ``) {
+    previousNum = ``;
+    currentDisplayNumber.textContent = currentNum;
+  }
+  if (currentNum.length < 10) {
+    currentNum += num;
+    currentDisplayNumber.textContent = currentNum;
+  }
+}
+
+function handleOperator(op) {
+  if (previousNum === ``) {
+    previousNum = currentNum;
+    operatorCheck(op);
+  } else if (currentNum === ``) {
+    operatorCheck(op);
+  } else {
+    calculate();
+    operator = op;
+    previousDisplayNumber.textContent = `${previousNum} ${operator}`;
+    currentDisplayNumber.textContent = `0`;
+  }
+}
+
+function operatorCheck(text) {
+  operator = text;
+  previousDisplayNumber.textContent = `${previousNum} ${operator}`;
+  currentDisplayNumber.textContent = `0`;
+  currentNum = ``;
+}
+
+function calculate() {
+  previousNum = Number(previousNum);
+  currentNum = Number(currentNum);
+
+  if (operator === `+`) {
+    previousNum += currentNum;
+  } else if (operator === `-`) {
+    previousNum -= currentNum;
+  } else if (operator === `*`) {
+    previousNum *= currentNum;
+  } else if (operator === `/`) {
+    if (currentNum === 0) {
+      previousNum = `Error`;
+      displayResult();
+      return;
+    }
+    previousNum /= currentNum;
+  }
+
+  previousNum = roundNumber(previousNum);
+  previousNum = previousNum.toString();
+  displayResult();
+}
+
+function roundNumber(num) {
+  return Math.round(num * 100000) / 100000;
+}
+
+function displayResult() {
+  if (previousNum.length < 10) {
+    currentDisplayNumber.textContent = previousNum;
+  } else {
+    currentDisplayNumber.textContent = `${previousNum.slice(0, 9)}...`;
+  }
+  previousDisplayNumber.textContent = ``;
+  operator = ``;
+  currentNum = ``;
+}
+
+function clearCalculator() {
+  currentNum = ``;
+  previousNum = ``;
+  operator = ``;
+  previousDisplayNumber.textContent = ``;
+  currentDisplayNumber.textContent = `0`;
+}

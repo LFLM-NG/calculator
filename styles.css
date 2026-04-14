@@ -23,6 +23,7 @@ body {
 }
 
 .display {
+    min-height: 90px;
     border: 2px solid black;
     border-radius: 12px;
     background-color: white;
@@ -39,7 +40,12 @@ body {
     display: flex;
 }
 
+.current-number {
+    flex-basis: 48px;
+}
+
 .previous-number {
+    flex-basis: 24px;
     font-size: 24px;
     color: rgba(0, 0, 0, 0.75);
 }
